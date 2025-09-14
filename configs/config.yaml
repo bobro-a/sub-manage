@@ -1,0 +1,7 @@
+database:
+  url: postgres://postgres:password@localhost:5432/postgres?sslmode=disable
+  name: subscriptions
+
+migrations:
+  path: file://./internal/migrations
+
