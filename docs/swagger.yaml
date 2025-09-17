@@ -1,0 +1,184 @@
+basePath: /
+definitions:
+  models.MonthYear:
+    properties:
+      time.Time:
+        type: string
+    type: object
+  models.Sub:
+    properties:
+      end_date:
+        $ref: '#/definitions/models.MonthYear'
+      id:
+        type: integer
+      price:
+        type: integer
+      service_name:
+        type: string
+      start_date:
+        $ref: '#/definitions/models.MonthYear'
+      user_id:
+        type: string
+    type: object
+host: localhost:9090
+info:
+  contact: {}
+  description: This is a simple subscription management API.
+  title: Sub-Manage API
+  version: "1.0"
+paths:
+  /:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a subscription by ID.
+      parameters:
+      - description: ID of the subscription to delete
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Invalid ID format
+          schema:
+            type: string
+        "404":
+          description: Subscription not found
+          schema:
+            type: string
+      summary: Delete a subscription
+    get:
+      consumes:
+      - application/json
+      description: Gets a single subscription by ID
+      parameters:
+      - description: ID of the subscription
+        in: query
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Sub'
+        "400":
+          description: Invalid ID format
+          schema:
+            type: string
+        "404":
+          description: Subscription not found
+          schema:
+            type: string
+      summary: Get a subscription of subscriptions
+    post:
+      consumes:
+      - application/json
+      description: Creates a new subscription with the provided data
+      parameters:
+      - description: Subscription object to create
+        in: body
+        name: subscription
+        required: true
+        schema:
+          $ref: '#/definitions/models.Sub'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Sub'
+        "400":
+          description: Invalid request fields
+          schema:
+            type: string
+      summary: Create a new subscription
+    put:
+      consumes:
+      - application/json
+      description: Updates a subscription with the provided data. The ID in the body
+        is required.
+      parameters:
+      - description: Subscription object with updated values
+        in: body
+        name: subscription
+        required: true
+        schema:
+          $ref: '#/definitions/models.Sub'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Sub'
+        "400":
+          description: Invalid ID or request fields
+          schema:
+            type: string
+        "404":
+          description: Subscription not found
+          schema:
+            type: string
+      summary: Update an existing subscription
+  /list:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all subscriptions from the database.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Sub'
+            type: array
+      summary: Get a list of all subscriptions
+  /sum:
+    get:
+      consumes:
+      - application/json
+      description: Calculates the total cost of subscriptions based on user_id, service_name,
+        start_date, and end_date.
+      parameters:
+      - description: User ID to filter subscriptions
+        format: uuid
+        in: query
+        name: user_id
+        type: string
+      - description: Service name to filter subscriptions
+        in: query
+        name: service_name
+        type: string
+      - description: Start date for calculation (YYYY-MM)
+        in: query
+        name: start_date
+        type: string
+      - description: End date for calculation (YYYY-MM)
+        in: query
+        name: end_date
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns a JSON object with the total cost
+          schema:
+            type: object
+        "400":
+          description: Invalid query parameters
+          schema:
+            type: string
+      summary: Calculate the total cost
+swagger: "2.0"

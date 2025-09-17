@@ -1,3 +1,8 @@
+// @title           Sub-Manage API
+// @version         1.0
+// @description     This is a simple subscription management API.
+// @host            localhost:9090
+// @BasePath        /
 package main
 
 import (
