@@ -1,0 +1,35 @@
+
+services:
+  db:
+    image: postgres:16
+    container_name: sub-db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres", "-d", "postgres" ]
+      interval: 10s
+      retries: 5
+
+  app:
+    build:
+      context: .
+    container_name: sub-manage
+    restart: always
+    environment:
+      CONFIG_PATH: ${CONFIG_PATH:-/app/configs/config-docker.yaml}
+    ports:
+      - "9090:9090"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./configs:/app/configs
+      - ./internal/migrations:/app/migrations
+
+volumes:
+  db_data:

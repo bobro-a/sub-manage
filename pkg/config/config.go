@@ -2,13 +2,18 @@ package config
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"os"
+
+	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
+	Server struct {
+		Port string `yaml:"port"`
+	} `yaml:"server"`
 	Database struct {
-		URL string `yaml:"url"`
+		URL  string `yaml:"url"`
+		Name string `yaml:"name"`
 	} `yaml:"database"`
 	Migrations struct {
 		Path string `yaml:"path"`

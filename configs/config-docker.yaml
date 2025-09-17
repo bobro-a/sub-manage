@@ -1,0 +1,9 @@
+server:
+  port: "9090"
+database:
+  url: postgres://postgres:password@sub-db:5432/postgres?sslmode=disable
+  name: subscriptions
+
+migrations:
+  path: file:///app/migrations
+
